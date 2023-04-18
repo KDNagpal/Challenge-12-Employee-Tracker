@@ -222,13 +222,6 @@ function updateEmployee() {
                     name: "role",
                     message: "Which role would you like the employee to be reassigned to?",
                     choices: roles
-                },
-                {
-                    type: "input",
-                    name: "salary",
-                    message: "Enter the new salary:",
-                    validate: value => !isNaN(value) || "Please enter a valid number.",
-                    when: answers => answers.role !== "nevermind"
                 }
             ])
             .then(data => {
@@ -238,15 +231,10 @@ function updateEmployee() {
                     return;
                 }
                 const updateRole = `UPDATE employee SET role_id = ? WHERE employee.id = ?`;
-                const updateSalary = `UPDATE role SET salary = ? WHERE role.id = ?`;
                 const roleId = roles.indexOf(role) + 1;
                 const employeeId = employees.indexOf(employee) + 1;
 
                 db.query(updateRole, [roleId, employeeId], (err, result) => {
-                    if (err) console.log(err);
-                });
-
-                db.query(updateSalary, [salary, roleId], (err, result) => {
                     if (err) console.log(err);
                     console.log(result);
                     mainMenu(questions);
@@ -394,7 +382,10 @@ function deleteRole(){
 
 function deleteEmployee(){
     db.query(`SELECT * FROM employee`, (err, emp) => {
-        const employees = [...emp.map(emp=>emp.first_name), "BACK"]
+        const employees = [
+            ...emp.map((employee) => `${employee.first_name} ${employee.last_name}`),
+            "BACK",
+          ];
         inquirer.prompt({
             type:"list",
             name: "employee",
