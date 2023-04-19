@@ -13,10 +13,35 @@ const db = mysql.createConnection(
     },
 );
 
-const mainMenu = ({ mainmenu }) => {
-    inquirer.prompt(mainmenu)
-      .then(data => pickOption(data));
+const mainMenu = () => {
+    const mainmenu = [
+      {
+        type: 'list',
+        name: 'type',
+        message: 'What would you like to do?',
+        choices: [
+          'View Departments',
+          'View Roles',
+          'View Employees',
+          'Add Department',
+          'Add Role',
+          'Add Employee',
+          'Update Employee',
+          'View Employee by Deparment',
+          'View Employee by Manager',
+          'View Department Budget',
+          'Update Employee Manager',
+          'Delete Department',
+          'Delete Role',
+          'Delete Employee',
+          'Exit',
+        ],
+      },
+    ];
+    console.log('Welcome to the [Insert Company Name] Employee Tracker');
+    inquirer.prompt(mainmenu).then((data) => pickOption(data));
   };
+  
   
   const pickOption = ({ type }) => {
     switch (type) {
